@@ -1,42 +1,63 @@
 package bordajogo;
 
 public class Tabuleiro {
-	
+
 	private int linhas;
 	private int colunas;
-	private Peca [][] pecas;
+	private Peca[][] pecas;
 
 	public Tabuleiro(int linhas, int colunas) {
+		if (linhas < 1 || colunas < 1) {
+			throw new ExcecaoBorda(
+					"Erro ao criar o tabuleiro: É necessário que aja pelo menos 1 linha e 1 uma coluna.");
+		}
 		this.linhas = linhas;
 		this.colunas = colunas;
-		pecas = new Peca [linhas][colunas];
+		pecas = new Peca[linhas][colunas];
 	}
 
 	public int getLinhas() {
 		return linhas;
 	}
 
-	public void setLinhas(int linhas) {
-		this.linhas = linhas;
-	}
-
 	public int getColunas() {
 		return colunas;
 	}
 
-	public void setColunas(int colunas) {
-		this.colunas = colunas;
-	}
-	
 	public Peca peca(int linha, int coluna) {
+		if (!posicaoExistentes(linha, coluna)) {
+			throw new ExcecaoBorda("Posição fora do tabuleiro. ");
+		}
 		return pecas[linha][coluna];
 	}
 
 	public Peca peca(Posicao posicao) {
-		return pecas[posicao.getLinha()] [posicao.getColuna()];
+		if (!posicaoExistentes(posicao)) {
+			throw new ExcecaoBorda("Posição fora do tabuleiro. ");
+		}
+		return pecas[posicao.getLinha()][posicao.getColuna()];
 	}
+
 	public void lugarPeca(Peca peca, Posicao posicao) {
+		if (haUmaPeca(posicao)) {
+			throw new ExcecaoBorda("Há uma peça nessa posição  " + posicao);
+		}
 		pecas[posicao.getLinha()][posicao.getColuna()] = peca;
 		peca.posicao = posicao;
+	}
+
+	private boolean posicaoExistentes(int linha, int coluna) {
+		return linha >= 0 && linha < linhas && coluna >= 0 && coluna < colunas;
+	}
+
+	public boolean posicaoExistentes(Posicao posicao) {
+		return posicaoExistentes(posicao.getLinha(), posicao.getColuna());
+	}
+
+	public boolean haUmaPeca(Posicao posicao) {
+		if (!posicaoExistentes(posicao)) {
+			throw new ExcecaoBorda("Posição fora do tabuleiro. ");
+		}
+		return peca(posicao) != null;
 	}
 }
