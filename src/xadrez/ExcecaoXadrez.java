@@ -1,6 +1,8 @@
 package xadrez;
 
-public class ExcecaoXadrez extends RuntimeException{
+import bordajogo.ExcecaoBorda;
+
+public class ExcecaoXadrez extends ExcecaoBorda{
 	private static final long serialVersionUID = 1L;
 
 	public ExcecaoXadrez(String msg) {
