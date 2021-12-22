@@ -30,12 +30,19 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_BRANCO_BACKGROUND = "\u001B[47m";
 
+	// https://stackoverflow.com/questions/2979383/java-clear-the-console
+	public static void limparTela() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
+	}
+
 	public static PosicaoXadrez lerPosicaoXadrez(Scanner sc) {
 		try {
 			String s = sc.nextLine();
 			char coluna = s.charAt(0);
 			int linha = Integer.parseInt(s.substring(1));
 			return new PosicaoXadrez(coluna, linha);
+
 		} catch (RuntimeException e) {
 			throw new InputMismatchException("Erro ao ler a posição do xadrez: Valores válidos do a1 ate h8.");
 		}
@@ -54,11 +61,8 @@ public class UI {
 	}
 
 	private static void printPeca(PecaXadrez peca, boolean background) {
-		if (background) {
-			System.out.print(ANSI_BLUE_BACKGROUND);
-		}
 		if (peca == null) {
-			System.out.print("-" + ANSI_RESET);
+			System.out.print("-");
 		} else {
 			if (peca.getCores() == Cores.BRANCO) {
 				System.out.print(ANSI_BRANCO + peca + ANSI_RESET);
